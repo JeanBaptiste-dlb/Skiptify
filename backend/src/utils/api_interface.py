@@ -72,8 +72,6 @@ class SPOTIFY_API_INTERFACE:
     def get_next_song(self) -> pd.Series:
         return None
 
-
-    
             
 
     def get_features(self, track_id) -> pd.Series:

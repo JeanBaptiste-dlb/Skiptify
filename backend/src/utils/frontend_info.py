@@ -1,4 +1,5 @@
 import spotipy
+import pandas as pd
 # -----------------
 # Token for getting song's info from Spotify
 USERNAME = "nellen.noemi"
@@ -20,3 +21,13 @@ token = spotipy.util.prompt_for_user_token(
 
 sp = spotipy.Spotify(auth=token)
 current_song = sp.currently_playing()
+song_name = current_song['item']['name']
+artist_name = current_song['item']['album']['artists'][0]['name']
+album_image_url = current_song['item']['album']['images'][0]['url']
+username = USERNAME
+
+names = ['song_name', 'artist_name', 'album_url']
+
+df = pd.DataFrame([song_name, artist_name, album_image_url])
+print("You are listening to " + song_name + " from " + artist_name)
+print(df)

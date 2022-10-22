@@ -19,4 +19,4 @@ Click this link https://discord.gg/8vs5a2Nk to koin our discord.
   - req.txt : environment
 
 `conda config --append channels conda-forge`
-`conda create --name <environment_name> --file requirements.txt`
+`conda create --name ./envs --file requirements.yml`

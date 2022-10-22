@@ -70,11 +70,7 @@ class SPOTIFY_API_INTERFACE:
         return self.get_features(id_)
 
     def get_next_song(self) -> pd.Series:
-        return None
-
-
-    
-            
+        return None        
 
     def get_features(self, track_id) -> pd.Series:
         features_results = self.sp.audio_features([track_id])
@@ -83,5 +79,7 @@ class SPOTIFY_API_INTERFACE:
         # Convert features dictionary to a list
         features_list = list(features_data[0].values())
         return pd.Series(features_list)
+
+
 
 

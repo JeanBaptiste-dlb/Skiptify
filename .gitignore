@@ -1,8 +1,9 @@
-<<<<<<< HEAD
-=======
 .idea/
+my_token.py
+data.csv
+settings.json
+.cache*
 
->>>>>>> e93a97bbba44796cca04d0f1d3c64822e823a91a
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

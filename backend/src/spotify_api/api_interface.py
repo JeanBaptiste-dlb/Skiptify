@@ -54,7 +54,7 @@ class SPOTIFY_API_INTERFACE:
         history = self.sp.current_user_recently_played(
             limit=50, after=None, before=None
         )
-        history_size=len(history["items"])
+        history_size = len(history["items"])
         for i in range(history_size):
             song_id = history["items"][i]["track"]["id"]
             song_ids.append(song_id)
@@ -93,12 +93,13 @@ class SPOTIFY_API_INTERFACE:
 
     def get_features(self, track_id) -> pd.Series:
         features_results = self.sp.audio_features([track_id]) 
-        save_path= Path(settings.DATA_PATH, "tmp", "song_features")
+        save_path = Path(settings.DATA_PATH, "tmp", "song_features")
         save_path.mkdir(parents=True, exist_ok=True)
         with open(Path(settings.DATA_PATH, "tmp", "song_features", f"{track_id}.json"), "w") as writer:
-            json_features = json.dump(
+            json.dump(
                 features_results, writer
             )
-        features_data = json.load(open(Path(settings.DATA_PATH, "tmp", "song_features", f"{track_id}.json"), "r"))
+        features_data = json.load(open(Path(settings.DATA_PATH, "tmp",
+                                  "song_features", f"{track_id}.json"), "r"))
         # Convert features dictionary to a list
         return pd.Series(features_data[0])

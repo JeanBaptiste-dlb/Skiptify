@@ -92,14 +92,18 @@ class SPOTIFY_API_INTERFACE:
         return current_song["context"]["uri"].split(":")[-1]
 
     def get_features(self, track_id) -> pd.Series:
-        features_results = self.sp.audio_features([track_id]) 
+        features_results = self.sp.audio_features([track_id])
         save_path = Path(settings.DATA_PATH, "tmp", "song_features")
         save_path.mkdir(parents=True, exist_ok=True)
-        with open(Path(settings.DATA_PATH, "tmp", "song_features", f"{track_id}.json"), "w") as writer:
-            json.dump(
-                features_results, writer
+        with open(
+            Path(settings.DATA_PATH, "tmp", "song_features", f"{track_id}.json"), "w"
+        ) as writer:
+            json.dump(features_results, writer)
+        features_data = json.load(
+            open(
+                Path(settings.DATA_PATH, "tmp", "song_features", f"{track_id}.json"),
+                "r",
             )
-        features_data = json.load(open(Path(settings.DATA_PATH, "tmp",
-                                  "song_features", f"{track_id}.json"), "r"))
+        )
         # Convert features dictionary to a list
         return pd.Series(features_data[0])

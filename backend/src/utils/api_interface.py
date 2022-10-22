@@ -23,7 +23,7 @@ class SPOTIFY_API_INTERFACE:
             redirect_uri=settings.SPOTIPY_REDIRECT_URI)
         self.sp=spotipy.Spotify(auth=self.token)
         return None
-        
+    
 
     def get_song_history(self):
         self._update_scope()
@@ -61,17 +61,27 @@ class SPOTIFY_API_INTERFACE:
         df['names'] = names
         df['song'] = songs
         df.drop(['type','uri','id',  "track_href","analysis_url","duration_ms", "time_signature"], axis=1)
-        return names, songs, song_ids
+        return df
+
+    def get_current_song(self):
+        self._update_scope(scope = 'user-read-currently-playing')
+        current_song = self.sp.currently_playing()
+        id_=current_song['item']['id']
+        return self.get_features(id_)
+
+    def get_next_song(self) -> pd.Series:
+        return None
+
+
+    
             
 
-    def get_features(self, track_id):
+    def get_features(self, track_id) -> pd.Series:
         features_results = self.sp.audio_features([track_id])
         json_features = json.dumps(features_results, Path(settings.DATA_PATH, "tmp", "song_feature.json"))
         features_data = json.loads(json_features)
         # Convert features dictionary to a list
         features_list = list(features_data[0].values())
-        return features_list
-
-
+        return pd.Series(features_list)
 
 

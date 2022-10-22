@@ -6,15 +6,15 @@ import { OnOneLine } from "./StyledComponents";
 import { CurrentSong } from "./CurrentSong";
 import { CurrentPlaylistname } from "./CurrentPlaylistname";
 
-export const Footer = () => {
+export const Footer = ({ currentSong, currentPlaylist }) => {
   return (
     <OnOneLine>
       <CurrentSong
-        songTitle="Blabla"
-        artist="Iron Maiden"
-        albumCover="https://upload.wikimedia.org/wikipedia/en/7/7c/Iron_Maiden_%28album%29_cover.jpg"
+        songTitle={currentSong?.song}
+        artist={currentSong?.artist}
+        albumCover={currentSong?.cover}
       />
-      <CurrentPlaylistname playlistname="Heavy Metal & Rock" />
+      <CurrentPlaylistname playlistname={currentPlaylist} />
     </OnOneLine>
   );
 };

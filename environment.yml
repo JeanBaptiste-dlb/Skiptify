@@ -1,4 +1,4 @@
-name: /home/broise/tmp_projects/Skiptify/envs
+name: envs
 channels:
   - conda-forge
   - anaconda

@@ -18,8 +18,6 @@ Click this link https://discord.gg/8vs5a2Nk to koin our discord.
   - test : tests
   - req.txt : environment
 
-`conda env update --prefix ./envs --file requirements.yml  --prune`
+`conda env create --file environment.yml`
 
 To update the env file:
-
-`conda env export | grep -v "^prefix: " > requirements.yml`

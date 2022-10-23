@@ -110,7 +110,7 @@ class SPOTIFY_API_INTERFACE:
             features = json.load(reader)
         return pd.Series(features)
 
-    def get_next_song(self, sp):
+    def get_next_song(self):
         """Get the next song in the currently playing playlist
 
         Args:
@@ -138,7 +138,7 @@ class SPOTIFY_API_INTERFACE:
             all_track_name.append(track_name)
 
         # get currently playing song
-        current_song = sp.currently_playing()
+        current_song = self.sp.currently_playing()
         current_song_id = current_song['item']['id']
         idx_next_song = all_track_id.index(current_song_id) + 1
         return all_track_id[idx_next_song]
@@ -220,5 +220,5 @@ class SPOTIFY_API_INTERFACE:
             return True
 
 if __name__ == "__main__":
-    interface=SPOTIFY_API_INTERFACE()
+    interface = SPOTIFY_API_INTERFACE()
     interface.is_song_skipped("6z8teIFzv6DFqsCfWfU425")

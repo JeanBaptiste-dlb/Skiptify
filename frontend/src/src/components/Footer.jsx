@@ -12,7 +12,7 @@ export const Footer = ({ currentSong, currentPlaylist }) => {
       <CurrentSong
         songTitle={currentSong?.song}
         artist={currentSong?.artist}
-        albumCover={currentSong?.cover}
+        albumCover={currentSong?.albumcover}
       />
       <CurrentPlaylistname playlistname={currentPlaylist} />
     </OnOneLine>

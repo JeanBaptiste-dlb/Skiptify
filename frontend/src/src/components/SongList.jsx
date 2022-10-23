@@ -27,16 +27,19 @@ export const Songlist = ({
   threshold,
 }) => {
   console.log(title);
-  const willBeSkipped = songs.filter(
-    (song) => song?.probability > threshold
-  ).length;
+  let willBeSkipped = false;
+  if (songs) {
+    willBeSkipped = songs.filter(
+      (song) => song?.probability > threshold
+    ).length;
+  }
   return (
     <Container color={color}>
       <Title>{title}</Title>
       {markProbability ? (
         <p>{willBeSkipped} songs will be skipped by Skiptify.</p>
       ) : (
-        <p>{songs.length} songs were skipped by Skiptify.</p>
+        <p>{songs && songs.length} songs were skipped by Skiptify.</p>
       )}
       <List>
         {songs &&
@@ -44,10 +47,10 @@ export const Songlist = ({
             <Song
               markProbability={markProbability}
               threshold={threshold}
-              title={song?.title}
+              title={song?.name}
               artist={song?.artist}
               probability={song?.probability}
-              cover={song?.cover}
+              cover={song?.albumcover}
             />
           ))}
       </List>

@@ -12,24 +12,28 @@
     {
       "name": "",
       "artist": "",
-      "albumcover": ""
+      "albumcover": "",
+      "probability": ""
     },
     {
       "name": "",
       "artist": "",
-      "albumcover": ""
+      "albumcover": "",
+      "probability": ""
     }
   ],
   "queueSongs": [
     {
       "name": "",
       "artist": "",
-      "albumcover": ""
+      "albumcover": "",
+      "probability": ""
     },
     {
       "name": "",
       "artist": "",
-      "albumcover": ""
+      "albumcover": "",
+      "probability": ""
     }
   ]
 }

@@ -10,7 +10,7 @@ export const Config = ({ threshold, setThreshold }) => {
 
   return (
     <OnOneLine>
-      <ConfigLabel>Threshold</ConfigLabel>
+      <ConfigLabel>Sensitivity</ConfigLabel>
       <SliderContainer>
         <Slider
           min={0}

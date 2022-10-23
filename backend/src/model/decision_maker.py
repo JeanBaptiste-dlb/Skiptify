@@ -15,7 +15,8 @@ class DecisionLoop:
         self.all_skipped = []
         self.all_non_skipped = []
         self.next_song = None
-        Path(settings.APP_PATH)
+        Path(settings.APP_PATH, "", "")
+
 
     def decision_maker(self):
         while True:

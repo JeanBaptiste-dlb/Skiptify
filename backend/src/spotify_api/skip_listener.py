@@ -28,7 +28,7 @@ class SKIP_LISTENER:
         self.previous_song = self.interface.get_current_song()
         self.update_end_time()
         while True:
-            if time.time() < self.end_time:
+            if time.time() < self.end_time - 1:
                 if self.previous_song["id"] != self.current_song["id"]:
                     self.all_skipped.append(self.previous_song)
                     self.save_all_skipped()
@@ -55,12 +55,12 @@ class SKIP_LISTENER:
     def save_all_non_skipped(self):
         self.all_non_skipped = self.all_non_skipped[-50:]
         pd.DataFrame(self.all_skipped).to_csv(Path(settings.DATA_PATH, "player_data",
-                                              "non_skipped.csv"))
+                                              "non_skipped.csv"), index=False)
 
     def save_all_skipped(self):
         self.all_skipped = self.all_skipped[-50:]
         pd.DataFrame(self.all_skipped).to_csv(Path(settings.DATA_PATH, "player_data",
-                     "skipped.csv"))
+                     "skipped.csv"), index=False)
 
     def update_end_time(self):
         try:

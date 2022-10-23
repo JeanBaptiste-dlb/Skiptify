@@ -8,6 +8,7 @@ import numpy as np
 from pathlib import Path
 import time
 from datetime import datetime
+from backend.src.spotify_api.spotify_actioner import SpotifyActioner
 
 
 class SKIP_LISTENER:
@@ -21,6 +22,8 @@ class SKIP_LISTENER:
         self.end_time = 0
         self.all_skipped = []
         self.all_non_skipped = []
+        self.to_skip_path = Path(settings.APP_PATH, "tmp", "to_skip")
+        self.actioner = SpotifyActioner()
         Path(settings.DATA_PATH, "player_data").mkdir(parents=True, exist_ok = True)
     
     def listen(self):
@@ -28,7 +31,26 @@ class SKIP_LISTENER:
         self.previous_song = self.interface.get_current_song()
         self.update_end_time()
         while True:
-            if time.time() < self.end_time:
+            if time.time() > self.end_time:
+                
+                with open(self.to_skip_path, "r") as reader:
+                    line = reader.readline()
+                if line == "True":
+                    self.interface.save_song_features(self.current_song, skip_state="SKIPPED BY ALGORITHM")
+                    self.actioner.skip_current_song()
+                with open(self.to_skip_path, "w") as writer:
+                    writer.write("False")
+                self.current_song = self.interface.get_current_song()
+                self.previous_song = self.current_song
+                self.update_end_time()
+                self.all_non_skipped.append(self.previous_song)
+                self.previous_song["date_saved"] = str(datetime.now())
+                self.interface.save_song_features(self.previous_song,
+                                                  "NOT SKIPPEP")
+                self.save_all_non_skipped()
+                print("not_skipped")
+                continue
+            else:
                 if self.previous_song["id"] != self.current_song["id"]:
                     self.all_skipped.append(self.previous_song)
                     self.save_all_skipped()
@@ -39,16 +61,7 @@ class SKIP_LISTENER:
                     self.update_end_time()
                 else:
                     self.previous_song = self.current_song
-            else:
-                self.current_song = self.interface.get_current_song()
-                self.previous_song = self.current_song
-                self.update_end_time()
-                self.all_non_skipped.append(self.previous_song)
-                self.previous_song["date_saved"] = str(datetime.now())
-                self.interface.save_song_features(self.previous_song,
-                                                  "NOT SKIPPEP")
-                self.save_all_non_skipped()
-                print("not_skipped")
+
             time.sleep(1)
             self.current_song = self.interface.get_current_song()
             

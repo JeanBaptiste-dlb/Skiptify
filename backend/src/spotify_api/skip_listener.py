@@ -40,11 +40,13 @@ class SKIP_LISTENER:
                 else:
                     self.previous_song = self.current_song
             else:
-                self.previous_song = self.current_song
                 self.current_song = self.interface.get_current_song()
+                self.previous_song = self.current_song
                 self.update_end_time()
                 self.all_non_skipped.append(self.previous_song)
                 self.previous_song["date_saved"] = str(datetime.now())
+                self.interface.save_song_features(self.previous_song,
+                                                  "NOT SKIPPEP")
                 self.save_all_non_skipped()
                 print("not_skipped")
             time.sleep(1)

@@ -155,7 +155,7 @@ class SPOTIFY_API_INTERFACE:
         self.sp._update_scope("user-read-currently-playing")
         name = self.sp.currently_playing()["item"]["name"]
         album_title = self.sp.currently_playing()["item"]["album"][""]
-        metadata={"name": name}
+        metadata = {"name": name}
         return metadata
 
 

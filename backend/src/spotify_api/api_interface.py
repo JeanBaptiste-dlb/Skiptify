@@ -124,10 +124,8 @@ class SPOTIFY_API_INTERFACE:
         # playlist_id = "3B4pbKqnUer2d7DII1QC8Q"
         offset_n = 0
         results = self.sp.user_playlist_tracks(self.sp.me()['id'], self.get_playlist_id(), offset=offset_n)
-
         json_results = json.dumps(results)
         data = json.loads(json_results)
-
         # Get id of all tracks
         all_track_id = []
         all_track_name = []
@@ -152,5 +150,12 @@ class SPOTIFY_API_INTERFACE:
     def get_features(self, track_id) -> pd.Series:
         features_results = self.sp.audio_features([track_id])
         return pd.Series(features_results[0])
+
+    def get_metadata(self, track_id):
+        self.sp._update_scope("user-read-currently-playing")
+        name = self.sp.currently_playing()["item"]["name"]
+        album_title = self.sp.currently_playing()["item"]["album"][""]
+        metadata={"name": name}
+        return metadata
 
 

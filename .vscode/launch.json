@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "ENV_FILE": ".env",
+        "PYTHONPATH": "${cwd}",
+        "VERBOSITY": "DEBUG",
+      }
+    },
+    {
+      "name": "Main File",
+      "type": "python",
+      "request": "launch",
+      "program": "app/main.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${cwd}",
+        "VERBOSITY": "DEBUG"
+      }
+    }
+  ]
+}

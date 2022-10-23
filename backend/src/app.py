@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for
-from backend.src.utils.frontend_info import df
+from utils.frontend_info import df
 
 app = Flask(__name__)
 app.debug = True

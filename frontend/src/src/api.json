@@ -1,0 +1,35 @@
+// http://127.0.0.1:5000
+
+{
+  "currentPlaylistName": "",
+  "currentSong": {
+    "name": "",
+    "artist": "",
+    "albumcover": ""
+  },
+  "threshold": "",
+  "skippedsongs": [
+    {
+      "name": "",
+      "artist": "",
+      "albumcover": ""
+    },
+    {
+      "name": "",
+      "artist": "",
+      "albumcover": ""
+    }
+  ],
+  "queueSongs": [
+    {
+      "name": "",
+      "artist": "",
+      "albumcover": ""
+    },
+    {
+      "name": "",
+      "artist": "",
+      "albumcover": ""
+    }
+  ]
+}

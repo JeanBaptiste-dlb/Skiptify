@@ -18,4 +18,6 @@ Click this link https://discord.gg/8vs5a2Nk to koin our discord.
   - test : tests
   - req.txt : environment
 
-`conda create --name <environment_name> --file requirements.txt`
+`conda env create --file environment.yml`
+
+To update the env file:

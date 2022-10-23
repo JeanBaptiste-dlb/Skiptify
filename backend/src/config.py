@@ -33,17 +33,16 @@ class Settings(BaseSettings):
     APP_PATH: str = os.path.abspath(".")
     DATA_PATH: str = os.path.join(APP_PATH, "app", "data")
 
-
-    #-----------------
+    # -----------------
     # Token for getting song's info from Spotify
-    USERNAME=""
-    SPOTIPY_CLIENT_ID=""
-    SPOTIPY_CLIENT_SECRET=""
-    SPOTIPY_REDIRECT_URI="https://example.com/callback"
+    USERNAME = ""
+    SPOTIPY_CLIENT_ID = ""
+    SPOTIPY_CLIENT_SECRET = ""
+    SPOTIPY_REDIRECT_URI = "https://example.com/callback"
 
     # Token for getting lyrics from Genius website - Rangsiman
-    token=""
-    #-----------------
+    token = ""
+    # -----------------
 
     scope = 'user-read-currently-playing'
 
@@ -77,6 +76,8 @@ def env_load(env_file: str) -> Settings:
         print(f"Error: impossible to read the env: {message}")
         return None
 # cache system to read the settings without everytime read the .env file
+
+
 @lru_cache()
 def get_settings(settings: Settings = None, env_file: str = None, **kwargs) -> Settings:
     """

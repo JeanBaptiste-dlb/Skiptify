@@ -22,7 +22,7 @@ def current_info():
         dict = data.to_dict()
     else:
         dict = pd.Series()
-    return {'data': dict}, 200  # return data and 200 OK code
+    return dict, 200  # return data and 200 OK code
 
 if __name__ == '__main__':
     app.run(debug=True)

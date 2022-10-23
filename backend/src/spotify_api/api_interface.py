@@ -151,11 +151,12 @@ class SPOTIFY_API_INTERFACE:
         features_results = self.sp.audio_features([track_id])
         return pd.Series(features_results[0])
 
-    def get_metadata(self, track_id):
-        self.sp._update_scope("user-read-currently-playing")
+    def get_metadata_current(self):
         name = self.sp.currently_playing()["item"]["name"]
-        album_title = self.sp.currently_playing()["item"]["album"][""]
-        metadata={"name": name}
-        return metadata
+        artist_name = self.sp.currently_playing()['item']['album']['artists'][0]['name']
+        album_image_url = self.sp.currently_playing()['item']['album']['images'][0]['url']
+        metadata = [name, artist_name, album_image_url]
+        test = pd.DataFrame(metadata, columns=["current_song"], index=["name", "album", "url"])
+        return test
 
 

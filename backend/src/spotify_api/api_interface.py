@@ -107,12 +107,11 @@ class SPOTIFY_API_INTERFACE:
             features = json.load(reader)
         return pd.Series(features)
 
-    def get_next_song(self, sp, playlist_id):
+    def get_next_song(self, sp):
         """Get the next song in the currently playing playlist
 
         Args:
             sp (_type_): Spotipy authentication
-            playlist_id (str): id of the currently playing playlist
 
         Returns:
             track_id of the next song
@@ -122,7 +121,7 @@ class SPOTIFY_API_INTERFACE:
         # Get all tracks of the given playlist
         # playlist_id = "3B4pbKqnUer2d7DII1QC8Q"
         offset_n = 0
-        results = self.sp.user_playlist_tracks(self.sp.me()['id'], playlist_id, offset=offset_n)
+        results = self.sp.user_playlist_tracks(self.sp.me()['id'], self.get_playlist_id(), offset=offset_n)
 
         json_results = json.dumps(results)
         data = json.loads(json_results)

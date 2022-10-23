@@ -1,6 +1,9 @@
 .idea/
-.cache
+.cache*
+settings.json
+*my_token.py
 
+data/tmp
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

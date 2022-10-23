@@ -161,8 +161,7 @@ class SPOTIFY_API_INTERFACE:
         features_list = list(features_data[0].values())
         return features_list
 
-    def get_metadata(self, track_id):
-        self.sp._update_scope("user-read-currently-playing")
+    def get_metadata(self):
         name = self.sp.currently_playing()["item"]["name"]
         artist_name = self.sp.currently_playing()['item']['album']['artists'][0]['name']
         album_image_url = self.sp.currently_playing()['item']['album']['images'][0]['url']

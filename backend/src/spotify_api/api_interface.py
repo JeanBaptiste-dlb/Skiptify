@@ -1,11 +1,11 @@
 import pandas as pd
 import spotipy
 from backend.src.config import settings
-import spotipy
 import spotipy.util as util
 import json
 import numpy as np
 from pathlib import Path
+from datetime import datetime
 
 
 class SPOTIFY_API_INTERFACE:
@@ -86,7 +86,7 @@ class SPOTIFY_API_INTERFACE:
             print("No song is currently playing.")
         return self.get_features(id_)
 
-    def save_song_features(self, features=pd.Series, skip_state="UNKNOWN"):
+    def save_song_features(self, features=pd.Series, skip_state="UNKNOWN", skip_probability=0):
         """
         Skip state can be "UNKNOWN", "SKIPPED", "NOT SKIPPED".
         """
@@ -95,7 +95,9 @@ class SPOTIFY_API_INTERFACE:
         with open(
             Path(settings.DATA_PATH, "tmp", "song_features", f"{features['id']}.json"), "w"
         ) as writer:
-            features["skip_state"]=skip_state
+            features["skip_state"] = skip_state
+            features["date_saved"] = str(datetime.now())
+            features["skip_probability"]= skip_probability
             json.dump(dict(features), writer)
 
     def load_song_features(self, song_id) -> pd.Series:
@@ -116,3 +118,5 @@ class SPOTIFY_API_INTERFACE:
     def get_features(self, track_id) -> pd.Series:
         features_results = self.sp.audio_features([track_id])
         return pd.Series(features_results[0])
+
+

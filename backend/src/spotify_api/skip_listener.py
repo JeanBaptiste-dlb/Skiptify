@@ -22,7 +22,7 @@ class SKIP_LISTENER:
         self.end_time = 0
         self.all_skipped = []
         self.all_non_skipped = []
-        self.to_skip_path = Path(settings.APP_PATH, "tmp", "to_skip")
+        self.to_skip_path = Path(settings.DATA_PATH, "tmp", "to_skip")
         self.actioner = SpotifyActioner()
         Path(settings.DATA_PATH, "player_data").mkdir(parents=True, exist_ok = True)
     
@@ -32,13 +32,12 @@ class SKIP_LISTENER:
         self.update_end_time()
         while True:
             if time.time() > self.end_time:
-                
                 with open(self.to_skip_path, "r") as reader:
                     line = reader.readline()
                 if line == "True":
                     self.interface.save_song_features(self.current_song, skip_state="SKIPPED BY ALGORITHM")
                     self.actioner.skip_current_song()
-                with open(self.to_skip_path, "w") as writer:
+                with open(Path(self.to_skip_path, "skip_decision.txt"), "w") as writer:
                     writer.write("False")
                 self.current_song = self.interface.get_current_song()
                 self.previous_song = self.current_song

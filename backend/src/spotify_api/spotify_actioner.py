@@ -29,6 +29,7 @@ class SpotifyActioner:
 
     def skip_current_song(self) -> None:
         self._update_scope(scope="user-modify-playback-state")
+        print("skipped algorithmically")
         song = self.interface.get_current_song()
         self.sp.next_track()
 

@@ -164,9 +164,20 @@ class SPOTIFY_API_INTERFACE:
     def get_metadata(self, track_id):
         self.sp._update_scope("user-read-currently-playing")
         name = self.sp.currently_playing()["item"]["name"]
-        album_title = self.sp.currently_playing()["item"]["album"][""]
-        metadata = {"name": name}
-        return metadata
+        artist_name = self.sp.currently_playing()['item']['album']['artists'][0]['name']
+        album_image_url = self.sp.currently_playing()['item']['album']['images'][0]['url']
+        metadata = [name, artist_name, album_image_url]
+        metadata_csv = pd.DataFrame(metadata, columns=["currentSong"], index=["song", "artist", "albumcover"])
+        return metadata_csv
+
+    def get_track_metadata(self, id):
+        song = self.sp.track(id)
+        name = song["name"]
+        artist_name = song['album']['artists'][0]['name']
+        album_image_url = song['album']['images'][0]['url']
+        metadata = [name, artist_name, album_image_url]
+        song_data = pd.DataFrame(metadata, index=["song", "artist", "albumcover"])
+        return song_data
 
     def calc_dist(self, feature1, feature2):
         dss = np.vstack((feature1, feature2))

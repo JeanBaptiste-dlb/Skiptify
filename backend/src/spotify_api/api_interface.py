@@ -156,7 +156,7 @@ class SPOTIFY_API_INTERFACE:
         artist_name = self.sp.currently_playing()['item']['album']['artists'][0]['name']
         album_image_url = self.sp.currently_playing()['item']['album']['images'][0]['url']
         metadata = [name, artist_name, album_image_url]
-        test = pd.DataFrame(metadata, columns=["current_song"], index=["name", "album", "url"])
+        test = pd.DataFrame(metadata, columns=["currentSong"], index=["song", "artist", "albumcover"])
         return test
 
 

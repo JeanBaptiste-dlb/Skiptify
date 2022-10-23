@@ -2,8 +2,10 @@ from flask import Flask, redirect, url_for
 from backend.src.spotify_api.api_interface import SPOTIFY_API_INTERFACE
 import pandas as pd
 import numpy as np
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.debug = True
 
 sp = SPOTIFY_API_INTERFACE()

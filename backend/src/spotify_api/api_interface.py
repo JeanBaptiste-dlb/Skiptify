@@ -6,6 +6,7 @@ from backend.src.config import settings
 import spotipy.util as util
 from pathlib import Path
 from datetime import datetime
+from sklearn.metrics import pairwise_distances
 
 
 class SPOTIFY_API_INTERFACE:
@@ -151,6 +152,15 @@ class SPOTIFY_API_INTERFACE:
         features_results = self.sp.audio_features([track_id])
         return pd.Series(features_results[0])
 
+    def get_features_to_list(self, track_id):
+        features_results = self.sp.audio_features([track_id])
+        json_features = json.dumps(features_results)
+        features_data = json.loads(json_features)
+
+        # Convert features dictionary to a list
+        features_list = list(features_data[0].values())
+        return features_list
+
     def get_metadata(self, track_id):
         self.sp._update_scope("user-read-currently-playing")
         name = self.sp.currently_playing()["item"]["name"]
@@ -158,4 +168,52 @@ class SPOTIFY_API_INTERFACE:
         metadata = {"name": name}
         return metadata
 
+    def calc_dist(self, feature1, feature2):
+        dss = np.vstack((feature1, feature2))
+        distance_matrix = pairwise_distances(dss)
+        return distance_matrix[0][1]
 
+    def is_song_skipped(self, track_id):
+        """Check if the given is skipped based on distance
+
+        Args:
+            track_id (str): id of the song to check if it should be skipped
+        
+        Return:
+            True: skip
+            False: skip
+        """
+        # self.sp._update_scope("user-read-currently-playing")
+        # get features of the skipped songs
+        df_skipped = pd.read_csv('../../../data/player_data/skipped.csv', usecols=[i for i in range(11)])
+        normalized_d_skipped = (df_skipped - df_skipped.mean()) / (df_skipped.max() - df_skipped.min())
+
+        # get features of the non-skipped songs
+        df_nonskipped = pd.read_csv('../../../data/player_data/non_skipped.csv', usecols=[i for i in range(11)])
+        normalized_d_nonskipped = (df_nonskipped - df_nonskipped.mean()) / (df_nonskipped.max() - df_nonskipped.min())
+
+        # get features of the song to check the similarity distance
+        feature1 = self.get_features_to_list(track_id)
+        feature1 = feature1[:11]
+
+        # calc distance to the skipped
+        distances_skipped = []
+        for i in range(len(normalized_d_skipped)):
+            feature2 = normalized_d_skipped.iloc[i,:]
+            dist_tmp = self.calc_dist(feature1, feature2)
+            distances_skipped.append(dist_tmp)
+
+        # calc distance to the skipped
+        distances_nonskipped = []
+        for i in range(len(normalized_d_nonskipped)):
+            feature3 = normalized_d_nonskipped.iloc[i,:]
+            dist_tmp = self.calc_dist(feature1, feature3)
+            distances_nonskipped.append(dist_tmp)
+
+        # compare distances
+        dist_skipped = np.array(distances_skipped).mean()
+        dist_nonskipped = np.array(distances_skipped).mean()
+        if dist_skipped > dist_nonskipped:
+            return False
+        else:
+            return True

@@ -15,7 +15,7 @@ class DecisionLoop:
         self.all_skipped = []
         self.all_non_skipped = []
         self.next_song = None
-        Path(settings.APP_PATH, "", "")
+        self.to_skip_path=Path(settings.APP_PATH, "tmp", "to_skip")
 
 
     def decision_maker(self):
@@ -26,7 +26,7 @@ class DecisionLoop:
                 skipped = self.interface.is_song_skipped(song_id)
                 # true or false
                 if skipped:
-                    with open
+                    with open(self.to_skip_path)
                  
             
             

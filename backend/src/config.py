@@ -31,7 +31,7 @@ class Settings(BaseSettings):
 
     # Application Path
     APP_PATH: str = os.path.abspath(".")
-    DATA_PATH: str = os.path.join(APP_PATH, "app", "data")
+    DATA_PATH: str = os.path.join(APP_PATH, "data")
 
     # -----------------
     # Token for getting song's info from Spotify
@@ -44,12 +44,20 @@ class Settings(BaseSettings):
     token = ""
     # -----------------
 
-    scope = 'user-read-currently-playing'
+    scope = "user-read-currently-playing"
 
     # To connect succesfully you need to provide your own Spotify Credentials
     # You can do this signing up in https://developer.spotify.com/ and creating a new app.
-    token = spotipy.util.prompt_for_user_token(
-        USERNAME, scope, client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET, redirect_uri=SPOTIPY_REDIRECT_URI)
+    TOKEN: Any = None
+
+    def set_token(self, scope):
+        self.TOKEN = spotipy.util.prompt_for_user_token(
+            self.USERNAME,
+            scope,
+            client_id=self.SPOTIPY_CLIENT_ID,
+            client_secret=self.SPOTIPY_CLIENT_SECRET,
+            redirect_uri=self.SPOTIPY_REDIRECT_URI,
+        )
 
 
 def env_load(env_file: str) -> Settings:
@@ -75,6 +83,8 @@ def env_load(env_file: str) -> Settings:
     except Exception as message:
         print(f"Error: impossible to read the env: {message}")
         return None
+
+
 # cache system to read the settings without everytime read the .env file
 
 

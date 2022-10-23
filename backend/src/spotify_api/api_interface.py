@@ -100,7 +100,7 @@ class SPOTIFY_API_INTERFACE:
         ) as writer:
             features["skip_state"] = skip_state
             features["date_saved"] = str(datetime.now())
-            features["skip_probability"]= skip_probability
+            features["skip_probability"] = skip_probability
             json.dump(dict(features), writer)
 
     def load_song_features(self, song_id) -> pd.Series:
@@ -110,7 +110,7 @@ class SPOTIFY_API_INTERFACE:
             features = json.load(reader)
         return pd.Series(features)
 
-    def get_next_song(self, sp):
+    def get_next_song(self):
         """Get the next song in the currently playing playlist
 
         Args:
@@ -138,7 +138,7 @@ class SPOTIFY_API_INTERFACE:
             all_track_name.append(track_name)
 
         # get currently playing song
-        current_song = sp.currently_playing()
+        current_song = self.sp.currently_playing()
         current_song_id = current_song['item']['id']
         idx_next_song = all_track_id.index(current_song_id) + 1
         return all_track_id[idx_next_song]
@@ -185,11 +185,12 @@ class SPOTIFY_API_INTERFACE:
         """
         # self.sp._update_scope("user-read-currently-playing")
         # get features of the skipped songs
-        df_skipped = pd.read_csv('../../../data/player_data/skipped.csv', usecols=[i for i in range(11)])
+        df_skipped = pd.read_csv(f'{settings.DATA_PATH}/player_data/skipped.csv', usecols=[i for i in range(11)])
+        
         normalized_d_skipped = (df_skipped - df_skipped.mean()) / (df_skipped.max() - df_skipped.min())
 
         # get features of the non-skipped songs
-        df_nonskipped = pd.read_csv('../../../data/player_data/non_skipped.csv', usecols=[i for i in range(11)])
+        df_nonskipped = pd.read_csv(f'{settings.DATA_PATH}/player_data/non_skipped.csv', usecols=[i for i in range(11)])
         normalized_d_nonskipped = (df_nonskipped - df_nonskipped.mean()) / (df_nonskipped.max() - df_nonskipped.min())
 
         # get features of the song to check the similarity distance
@@ -217,3 +218,7 @@ class SPOTIFY_API_INTERFACE:
             return False
         else:
             return True
+
+if __name__ == "__main__":
+    interface = SPOTIFY_API_INTERFACE()
+    interface.is_song_skipped("6z8teIFzv6DFqsCfWfU425")

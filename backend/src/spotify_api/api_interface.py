@@ -82,9 +82,11 @@ class SPOTIFY_API_INTERFACE:
             self._update_scope(scope="user-read-currently-playing")
             current_song = self.sp.currently_playing()
             id_ = current_song["item"]["id"]
+            return self.get_features(id_)
         except TypeError:
             print("No song is currently playing.")
-        return self.get_features(id_)
+            return None
+        
 
     def save_song_features(self, features=pd.Series, skip_state="UNKNOWN", skip_probability=0):
         """
@@ -140,9 +142,8 @@ class SPOTIFY_API_INTERFACE:
         # get currently playing song
         current_song = sp.currently_playing()
         current_song_id = current_song['item']['id']
-
         idx_next_song = all_track_id.index(current_song_id) + 1
-        return all_track_id[idx_next_song], all_track_name[idx_next_song]
+        return all_track_id[idx_next_song]
 
     def get_playlist_id(self):
         self._update_scope(scope="user-read-currently-playing")

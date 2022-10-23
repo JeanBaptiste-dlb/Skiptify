@@ -23,10 +23,23 @@ class DecisionLoop:
             next_song = self.interface.get_next_song()
             if next_song != self.next_song:
                 self.next_song = next_song
-                skipped = self.interface.is_song_skipped(song_id)
+                skip_decision = self.interface.is_song_skipped(next_song["id"])
                 # true or false
-                if skipped:
-                    with open(self.to_skip_path)
+                with open(self.to_skip_path, "w") as writer:
+                    writer.write(str(skip_decision))
+                sleep(5)
+            
+
+
+            
+
+    
+                
+                        
+                        
+                        
+            
+
                  
             
             

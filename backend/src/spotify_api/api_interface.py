@@ -99,7 +99,7 @@ class SPOTIFY_API_INTERFACE:
         ) as writer:
             features["skip_state"] = skip_state
             features["date_saved"] = str(datetime.now())
-            features["skip_probability"]= skip_probability
+            features["skip_probability"] = skip_probability
             json.dump(dict(features), writer)
 
     def load_song_features(self, song_id) -> pd.Series:

@@ -2,7 +2,7 @@ import spotipy
 from backend.src.config import settings
 from backend.src.spotify_api.api_interface import SPOTIFY_API_INTERFACE
 
-class SpotifyActionnner:
+class SpotifyActioner:
     def __init__(self):
         self.scope = settings.scope
         self.token = spotipy.util.prompt_for_user_token(

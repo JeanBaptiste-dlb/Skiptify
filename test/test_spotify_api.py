@@ -1,16 +1,14 @@
 import pytest
 from backend.src.spotify_api.api_interface import SPOTIFY_API_INTERFACE
-
+interface = SPOTIFY_API_INTERFACE()
 
 @pytest.mark.spotify_api_test
 def test_get_history():
-    interface = SPOTIFY_API_INTERFACE()
     interface.get_song_history()
 
 
 @pytest.mark.spotify_api_test
 def test_get_current():
-    interface = SPOTIFY_API_INTERFACE()
     current_song = interface.get_current_song()
     assert all(
         [
@@ -39,7 +37,16 @@ def test_get_current():
         ]
     )
 
+def test_save_load_features():
+    current_song = interface.get_current_song()
+    interface.save_song_features(current_song, "UNKNOWN")
+    features = interface.load_song_features(current_song["id"])
+    current_song["skip_state"] = "UNKNOWN"
+    assert((current_song==features).all())
+
+
 
 if __name__ == "__main__":
     test_get_current()
     test_get_history()
+    test_save_load_features()

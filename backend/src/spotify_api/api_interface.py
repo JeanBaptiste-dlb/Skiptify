@@ -78,10 +78,32 @@ class SPOTIFY_API_INTERFACE:
         return df
 
     def get_current_song(self):
-        self._update_scope(scope="user-read-currently-playing")
-        current_song = self.sp.currently_playing()
-        id_ = current_song["item"]["id"]
+        try:
+            self._update_scope(scope="user-read-currently-playing")
+            current_song = self.sp.currently_playing()
+            id_ = current_song["item"]["id"]
+        except TypeError:
+            print("No song is currently playing.")
         return self.get_features(id_)
+
+    def save_song_features(self, features=pd.Series, skip_state="UNKNOWN"):
+        """
+        Skip state can be "UNKNOWN", "SKIPPED", "NOT SKIPPED".
+        """
+        save_path = Path(settings.DATA_PATH, "tmp", "song_features")
+        save_path.mkdir(parents=True, exist_ok=True)
+        with open(
+            Path(settings.DATA_PATH, "tmp", "song_features", f"{features['id']}.json"), "w"
+        ) as writer:
+            features["skip_state"]=skip_state
+            json.dump(dict(features), writer)
+
+    def load_song_features(self, song_id) -> pd.Series:
+        with open(
+            Path(settings.DATA_PATH, "tmp", "song_features", f"{song_id}.json"), "r"
+        ) as reader:
+            features = json.load(reader)
+        return pd.Series(features)
 
     def get_next_song(self) -> pd.Series:
         return None
@@ -93,17 +115,4 @@ class SPOTIFY_API_INTERFACE:
 
     def get_features(self, track_id) -> pd.Series:
         features_results = self.sp.audio_features([track_id])
-        save_path = Path(settings.DATA_PATH, "tmp", "song_features")
-        save_path.mkdir(parents=True, exist_ok=True)
-        with open(
-            Path(settings.DATA_PATH, "tmp", "song_features", f"{track_id}.json"), "w"
-        ) as writer:
-            json.dump(features_results, writer)
-        features_data = json.load(
-            open(
-                Path(settings.DATA_PATH, "tmp", "song_features", f"{track_id}.json"),
-                "r",
-            )
-        )
-        # Convert features dictionary to a list
-        return pd.Series(features_data[0])
+        return pd.Series(features_results[0])

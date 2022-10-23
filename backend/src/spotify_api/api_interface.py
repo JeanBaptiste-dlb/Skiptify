@@ -1,10 +1,9 @@
+import json
+import numpy as np
 import pandas as pd
 import spotipy
 from backend.src.config import settings
-import spotipy
 import spotipy.util as util
-import json
-import numpy as np
 from pathlib import Path
 
 
@@ -95,7 +94,7 @@ class SPOTIFY_API_INTERFACE:
         with open(
             Path(settings.DATA_PATH, "tmp", "song_features", f"{features['id']}.json"), "w"
         ) as writer:
-            features["skip_state"]=skip_state
+            features["skip_state"] = skip_state
             json.dump(dict(features), writer)
 
     def load_song_features(self, song_id) -> pd.Series:
@@ -105,8 +104,42 @@ class SPOTIFY_API_INTERFACE:
             features = json.load(reader)
         return pd.Series(features)
 
-    def get_next_song(self) -> pd.Series:
-        return None
+    def get_next_song(self, sp, playlist_id):
+        """Get the next song in the currently playing playlist
+
+        Args:
+            sp (_type_): Spotipy authentication
+            playlist_id (str): id of the currently playing playlist
+
+        Returns:
+            track_id of the next song
+            track_name of the next song
+        """
+        self._update_scope("user-read-currently-playing")
+        # Get all tracks of the given playlist
+        # playlist_id = "3B4pbKqnUer2d7DII1QC8Q"
+        offset_n = 0
+        results = self.sp.user_playlist_tracks(self.sp.me()['id'], playlist_id, offset=offset_n)
+
+        json_results = json.dumps(results)
+        data = json.loads(json_results)
+
+        # Get id of all tracks
+        all_track_id = []
+        all_track_name = []
+        for track in data['items']:
+            track_id = track['track']['id']
+            date_added = track['added_at']
+            track_name = track['track']['name']
+            all_track_id.append(track_id)
+            all_track_name.append(track_name)
+
+        # get currently playing song
+        current_song = sp.currently_playing()
+        current_song_id = current_song['item']['id']
+
+        idx_next_song = all_track_id.index(current_song_id) + 1
+        return all_track_id[idx_next_song], all_track_name[idx_next_song]
 
     def get_playlist_id(self):
         self._update_scope(scope="user-read-currently-playing")
